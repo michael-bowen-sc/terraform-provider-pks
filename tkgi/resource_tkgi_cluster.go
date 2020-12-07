@@ -111,10 +111,10 @@ func resourcePksClusterCreate(d *schema.ResourceData, m interface{}) error {
 	}
 
 	clusterReq := ClusterRequest{
-		Parameters: params,
-		Name:       name,
-		PlanName:   d.Get("plan").(string),
-		NetworkProfileName:   d.Get("net_profile_name").(string),
+		Parameters:         params,
+		Name:               name,
+		PlanName:           d.Get("plan").(string),
+		NetworkProfileName: d.Get("net_profile_name").(string),
 	}
 
 	log.Printf("[DEBUG] TKGI cluster create request configuration: %#v", clusterReq)

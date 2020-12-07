@@ -1,4 +1,4 @@
-module github.com/benjvi/terraform-provider-tkgi
+module github.com/michael-bowen-sc/terraform-provider-tkgi
 
 go 1.13
 
