@@ -1,9 +1,9 @@
 Terraform Provider
 ==================
 
-It's a Terraform provider for PKS. At the moment the only completed resource is the `pks_cluster` resource for creating clusters.
+It's a Terraform provider for TKGI. At the moment the only completed resource is the `tkgi_cluster` resource for creating clusters.
 
-Note that this is not an officially supported provider. Nor does the PKS HTTP API offer any direct guarantees to maintaining compatibility over upgrades. 
+Note that this is not an officially supported provider. Nor does the TKGI HTTP API offer any direct guarantees to maintaining compatibility over upgrades. 
 However, if you encounter any issues you are welcome to raise an issue on this repo.
 
 - Website: https://www.terraform.io
@@ -29,12 +29,12 @@ Example Configuration
 
 A simple configuration to create a cluster:
 ```
-provider "pks" {
-  target = "${var.pks_api_dns_name}"
+provider "tkgi" {
+  target = "${var.tkgi_api_dns_name}"
   token = "${var.token}"
 }
 
-resource "pks_cluster" "example" {
+resource "tkgi_cluster" "example" {
   name = "example1"
   external_hostname = "${var.k8s_api_dns_name}"
   plan = "small"
@@ -45,7 +45,7 @@ variable "k8s_api_dns_name" {
   type = "string"
 }
 
-variable "pks_api_dns_name" {
+variable "tkgi_api_dns_name" {
   type = "string"
 }
 
@@ -60,7 +60,7 @@ Configuration Options
 
 Configuration options can be found :
 * [Here](/docs/provider_configuration.md) for the provider itself
-* [Here](/docs/resource_pks_cluster.md) for the `pks_cluster` resource
+* [Here](/docs/resource_tkgi_cluster.md) for the `tkgi_cluster` resource
 
 Developing the Provider
 ---------------------

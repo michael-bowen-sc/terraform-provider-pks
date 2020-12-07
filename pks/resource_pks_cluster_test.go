@@ -1,4 +1,4 @@
-package pks
+package tkgi
 
 import (
 	"fmt"
@@ -13,7 +13,7 @@ import (
 
 func TestAccPksCluster_basic(t *testing.T) {
 	rString := acctest.RandString(6)
-	resourceName := "pks_cluster.test"
+	resourceName := "tkgi_cluster.test"
 	clusterName := "tf_acc_basic_" + rString
 	hostname := clusterName + ".example.com"
 
@@ -41,7 +41,7 @@ func TestAccPksCluster_basic(t *testing.T) {
 
 func TestAccPksCluster_allFields(t *testing.T) {
 	rString := acctest.RandString(6)
-	resourceName := "pks_cluster.test"
+	resourceName := "tkgi_cluster.test"
 	clusterName := "tf_acc_allfields_" + rString
 	hostname := clusterName + ".example.com"
 
@@ -77,7 +77,7 @@ func TestAccPksCluster_allFields(t *testing.T) {
 
 func TestAccPksCluster_update(t *testing.T) {
 	rString := acctest.RandString(6)
-	resourceName := "pks_cluster.test"
+	resourceName := "tkgi_cluster.test"
 	clusterName := "tf_acc_update_" + rString
 	hostname := clusterName + ".example.com"
 	var initialUuid *string
@@ -143,7 +143,7 @@ func TestAccPksCluster_update(t *testing.T) {
 func TestAccPksCluster_CreateAfterManualDestroy(t *testing.T) {
 	rString := acctest.RandString(6)
 
-	resourceName := "pks_cluster.test"
+	resourceName := "tkgi_cluster.test"
 	clusterName := "tf_acc_recreate_" + rString
 	hostname := clusterName + ".example.com"
 	var initialUuid *string
@@ -197,7 +197,7 @@ func TestAccPksCluster_CreateAfterManualDestroy(t *testing.T) {
 func TestAccPksCluster_import(t *testing.T) {
 	rString := acctest.RandString(6)
 
-	resourceName := "pks_cluster.test"
+	resourceName := "tkgi_cluster.test"
 	clusterName := "tf_acc_import_" + rString
 	hostname := clusterName + ".example.com"
 
@@ -253,7 +253,7 @@ func testAccCheckPksClusterDestroy(s *terraform.State) error {
 	client := testAccProvider.Meta().(*Client)
 
 	for _, rs := range s.RootModule().Resources {
-		if rs.Type != "pks_cluster" {
+		if rs.Type != "tkgi_cluster" {
 			continue
 		}
 
@@ -295,7 +295,7 @@ func testAccManuallyDeletePksCluster(clusterName string) resource.TestCheckFunc 
 
 func testAccPksClusterBasicConfig(name, hostname string) string {
 	return fmt.Sprintf(`
-resource "pks_cluster" "test" {
+resource "tkgi_cluster" "test" {
   name = "%s"
   external_hostname = "%s"
   plan = "small"
@@ -305,7 +305,7 @@ resource "pks_cluster" "test" {
 
 func testAccPksClusterAllFieldsConfig(name, hostname string, nodes int) string {
 	return fmt.Sprintf(`
-resource "pks_cluster" "test" {
+resource "tkgi_cluster" "test" {
   name = "%s"
   external_hostname = "%s"
   plan = "small"

@@ -1,4 +1,4 @@
-package pks
+package tkgi
 
 import (
 	"bytes"
@@ -39,7 +39,7 @@ type ClusterResponse struct {
 	LastActionDescription string            `json:"last_action_description"`
 	Uuid                  string            `json:"uuid"`
 	K8sVersion            string            `json:"k8s_version"`
-	PksVersion            string            `json:"pks_version"`
+	PksVersion            string            `json:"tkgi_version"`
 	KubernetesMasterIps   []string          `json:"kubernetes_master_ips"`
 	Parameters            ClusterParameters `json:"parameters"`
 	NetworkProfileName    string `json:"network_profile_name"`
@@ -52,7 +52,7 @@ type UpdateClusterParameters struct {
 func ClientLogin(httpClient *http.Client, hostname, clientId, clientSecret string) (string, error) {
 	/*
 		Replicating this working curl command:
-		curl -s https://${PKS_ADDRESS}:8443/oauth/token
+		curl -s https://${TKGI_ADDRESS}:8443/oauth/token
 		     -k -X POST -H 'Accept: application/json;charset=utf-8'
 		     -u "client_id:client_secret" -H 'Content-Type: application/x-www-form-urlencoded;charset=utf-8'
 		     -d 'grant_type=client_credentials'
@@ -66,19 +66,19 @@ func ClientLogin(httpClient *http.Client, hostname, clientId, clientSecret strin
 	resp, err := httpClient.Do(req)
 	if err != nil {
 		// this doesn't catch 4xx/5xx !
-		return "", fmt.Errorf("error connecting to PKS API to get token %q: %q", req.URL.String(), err.Error())
+		return "", fmt.Errorf("error connecting to TKGI API to get token %q: %q", req.URL.String(), err.Error())
 	}
 	defer resp.Body.Close()
 
 	if resp.StatusCode > 299 {
 		body, _ := ioutil.ReadAll(resp.Body)
-		return "", fmt.Errorf("PKS token request returned unexpected status %q with response: %q", resp.Status, body)
+		return "", fmt.Errorf("TKGI token request returned unexpected status %q with response: %q", resp.Status, body)
 	}
 
 	var token Token
 	err = json.NewDecoder(resp.Body).Decode(&token)
 	if err != nil {
-		return "", fmt.Errorf("error parsing token response from PKS API %q: %q", req.URL.String(), err.Error())
+		return "", fmt.Errorf("error parsing token response from TKGI API %q: %q", req.URL.String(), err.Error())
 	}
 
 	return token.AccessToken, nil
@@ -91,7 +91,7 @@ func GetCluster(client *Client, clusterName string) (*ClusterResponse, bool, err
 	resp, err := client.httpClient.Do(req)
 	if err != nil {
 		// this doesn't catch 4xx/5xx !
-		return nil, false, fmt.Errorf("error reading cluster from PKS API %q: %q", req.URL.String(), err.Error())
+		return nil, false, fmt.Errorf("error reading cluster from TKGI API %q: %q", req.URL.String(), err.Error())
 	}
 	defer resp.Body.Close()
 
@@ -105,7 +105,7 @@ func GetCluster(client *Client, clusterName string) (*ClusterResponse, bool, err
 	var cr ClusterResponse
 	err = json.NewDecoder(resp.Body).Decode(&cr)
 	if err != nil {
-		return nil, false, fmt.Errorf("error parsing cluster response from PKS API %q: %q", req.URL.String(), err.Error())
+		return nil, false, fmt.Errorf("error parsing cluster response from TKGI API %q: %q", req.URL.String(), err.Error())
 	}
 	return &cr, true, nil
 }
@@ -157,7 +157,7 @@ func DeleteCluster(client *Client, clusterName string) error {
 
 	resp, err := client.httpClient.Do(req)
 	if err != nil {
-		return fmt.Errorf("error deleting cluster from PKS API %q: %q", req.URL.String(), err.Error())
+		return fmt.Errorf("error deleting cluster from TKGI API %q: %q", req.URL.String(), err.Error())
 	}
 	defer resp.Body.Close()
 
@@ -176,7 +176,7 @@ func WaitForClusterAction(client *Client, clusterName, action string) error {
 	timeout := time.After(time.Duration(client.maxWaitMin) * time.Minute)
 	tick := time.Tick(time.Duration(client.waitPollIntervalSec) * time.Second)
 
-	// may take a few moments for our action to be registered in PKS
+	// may take a few moments for our action to be registered in TKGI
 	maxPollingRetries := 3
 	pollingRetries := 0
 

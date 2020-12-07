@@ -1,6 +1,6 @@
 TEST?=./...
 GOFMT_FILES?=$$(find . -name '*.go' |grep -v vendor)
-PKG_NAME=pks
+PKG_NAME=tkgi
 
 default: build
 

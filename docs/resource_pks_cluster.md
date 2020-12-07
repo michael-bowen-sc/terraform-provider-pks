@@ -1,6 +1,6 @@
-# pks_cluster
+# tkgi_cluster
 
-Creates Kubernetes clusters using the PKS Cluster API. 
+Creates Kubernetes clusters using the TKGI Cluster API. 
 
 This resource waits for any actions taken on the cluster to be completed, allowing additional resources to be created that depend on completed cluster creation.
 
@@ -9,7 +9,7 @@ Will update the cluster in place if the number of worker nodes (`num_nodes`) is 
 ## Example Usage
 
 ```hcl
-resource "pks_cluster" "example" {
+resource "tkgi_cluster" "example" {
   name = "example1"
   external_hostname = "example1-api.example.com"
   plan = "small"
@@ -21,7 +21,7 @@ resource "pks_cluster" "example" {
 
 The following arguments are supported:
 
-* `name` - (Required) The name to assign to the cluster in PKS.
+* `name` - (Required) The name to assign to the cluster in TKGI.
 * `external_hostname` - (Required) The hostname that will be used for accessing the Kubernetes cluster API.
 * `plan` - (Required) Plan used to create cluster, will determine master size, default worker set and other cluster settings.
 * `num_nodes` - (Optional) Number of worker nodes, overriding the default specified by the plan.
@@ -33,8 +33,8 @@ The following attributes are exported:
 * `master_ips` - IPs assigned to the Kubernetes master VMs.
 * `uuid` - Unique ID for the cluster, use this to lookup the cluster with BOSH.
 * `k8s_version`
-* `pks_version`
-* `last_action` - Last action performed on the cluster through PKS, one of "CREATE", "UPDATE", "DELETE".
+* `tkgi_version`
+* `last_action` - Last action performed on the cluster through TKGI, one of "CREATE", "UPDATE", "DELETE".
 * `last_action_state` - One of: "in progress", "succeeded", "failed".
 * `last_action_description` - Any errors from the last action will be shown here.
 
@@ -43,5 +43,5 @@ The following attributes are exported:
 Use the cluster name to import an existing cluster, e.g.
 
 ```
-$ terraform import pks_cluster.example example_cluster_name
+$ terraform import tkgi_cluster.example example_cluster_name
 ```

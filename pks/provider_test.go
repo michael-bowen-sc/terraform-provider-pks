@@ -1,4 +1,4 @@
-package pks
+package tkgi
 
 import (
 	"github.com/hashicorp/terraform-plugin-sdk/helper/acctest"
@@ -14,7 +14,7 @@ var testAccProvider *schema.Provider
 func init() {
 	testAccProvider = Provider().(*schema.Provider)
 	testAccProviders = map[string]terraform.ResourceProvider{
-		"pks": testAccProvider,
+		"tkgi": testAccProvider,
 	}
 }
 
@@ -31,8 +31,8 @@ func TestProvider_impl(t *testing.T) {
 type preCheckFunc = func(*testing.T)
 
 func testAccPreCheck(t *testing.T) {
-	if v := os.Getenv("PKS_HOSTNAME"); v == "" {
-		t.Fatal("PKS_HOSTNAME must be set for acceptance tests")
+	if v := os.Getenv("TKGI_HOSTNAME"); v == "" {
+		t.Fatal("TKGI_HOSTNAME must be set for acceptance tests")
 	}
 }
 

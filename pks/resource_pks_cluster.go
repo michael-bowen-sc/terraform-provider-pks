@@ -1,4 +1,4 @@
-package pks
+package tkgi
 
 import (
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
@@ -62,7 +62,7 @@ func resourcePksCluster() *schema.Resource {
 				Computed: true,
 			},
 
-			"pks_version": {
+			"tkgi_version": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
@@ -71,7 +71,7 @@ func resourcePksCluster() *schema.Resource {
 				Type:     schema.TypeString,
 				Computed: true,
 				//ValidateFunc: validation.StringInSlice([]string{"CREATE", "UPDATE", "DELETE"}, true),
-				Description: "Last action performed on the cluster through PKS, one of CREATE, UPDATE, DELETE",
+				Description: "Last action performed on the cluster through TKGI, one of CREATE, UPDATE, DELETE",
 			},
 
 			"last_action_state": {
@@ -98,7 +98,7 @@ func resourcePksCluster() *schema.Resource {
 }
 
 func resourcePksClusterCreate(d *schema.ResourceData, m interface{}) error {
-	pksClient := m.(*Client)
+	tkgiClient := m.(*Client)
 
 	// 1. setup request object
 	name := d.Get("name").(string)
@@ -117,14 +117,14 @@ func resourcePksClusterCreate(d *schema.ResourceData, m interface{}) error {
 		NetworkProfileName:   d.Get("net_profile_name").(string),
 	}
 
-	log.Printf("[DEBUG] PKS cluster create request configuration: %#v", clusterReq)
+	log.Printf("[DEBUG] TKGI cluster create request configuration: %#v", clusterReq)
 
-	err := CreateCluster(pksClient, clusterReq)
+	err := CreateCluster(tkgiClient, clusterReq)
 	if err != nil {
 		return err
 	}
 
-	err = WaitForClusterAction(pksClient, name, "CREATE")
+	err = WaitForClusterAction(tkgiClient, name, "CREATE")
 	if err != nil {
 		return err
 	}
@@ -136,12 +136,12 @@ func resourcePksClusterCreate(d *schema.ResourceData, m interface{}) error {
 }
 
 func resourcePksClusterRead(d *schema.ResourceData, m interface{}) error {
-	pksClient := m.(*Client)
+	tkgiClient := m.(*Client)
 	// only use *terraform* ID (cluster name) to do the read, this is all that is guaranteed to be set
 	// in particular, on import only ID is set
 	name := d.Id()
 
-	cr, exists, err := GetCluster(pksClient, name)
+	cr, exists, err := GetCluster(tkgiClient, name)
 	if err != nil {
 		return err
 	}
@@ -167,7 +167,7 @@ func resourcePksClusterRead(d *schema.ResourceData, m interface{}) error {
 }
 
 func resourcePksClusterUpdate(d *schema.ResourceData, m interface{}) error {
-	pksClient := m.(*Client)
+	tkgiClient := m.(*Client)
 	name := d.Id()
 
 	updateClusterReq := UpdateClusterParameters{}
@@ -179,12 +179,12 @@ func resourcePksClusterUpdate(d *schema.ResourceData, m interface{}) error {
 	}
 
 	if updatesFound {
-		err := UpdateCluster(pksClient, name, updateClusterReq)
+		err := UpdateCluster(tkgiClient, name, updateClusterReq)
 		if err != nil {
 			return err
 		}
 
-		err = WaitForClusterAction(pksClient, name, "UPDATE")
+		err = WaitForClusterAction(tkgiClient, name, "UPDATE")
 		if err != nil {
 			return err
 		}
@@ -194,15 +194,15 @@ func resourcePksClusterUpdate(d *schema.ResourceData, m interface{}) error {
 }
 
 func resourcePksClusterDelete(d *schema.ResourceData, m interface{}) error {
-	pksClient := m.(*Client)
+	tkgiClient := m.(*Client)
 	name := d.Id()
 
-	err := DeleteCluster(pksClient, name)
+	err := DeleteCluster(tkgiClient, name)
 	if err != nil {
 		return err
 	}
 
-	err = WaitForClusterAction(pksClient, name, "DELETE")
+	err = WaitForClusterAction(tkgiClient, name, "DELETE")
 	if err != nil {
 		return err
 	}

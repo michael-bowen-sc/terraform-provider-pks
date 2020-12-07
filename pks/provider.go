@@ -1,4 +1,4 @@
-package pks
+package tkgi
 
 import (
 	"crypto/tls"
@@ -22,14 +22,14 @@ func Provider() terraform.ResourceProvider {
 			"hostname": {
 				Type:        schema.TypeString,
 				Optional:    true,
-				DefaultFunc: schema.EnvDefaultFunc("PKS_HOSTNAME", nil),
+				DefaultFunc: schema.EnvDefaultFunc("TKGI_HOSTNAME", nil),
 			},
 
 			"token": {
 				Type:          schema.TypeString,
 				Optional:      true,
 				ConflictsWith: []string{"client_id", "client_secret"},
-				DefaultFunc:   schema.EnvDefaultFunc("PKS_TOKEN", nil),
+				DefaultFunc:   schema.EnvDefaultFunc("TKGI_TOKEN", nil),
 				Description:   "Use generated token from UAA in lieu of normal auth",
 			},
 
@@ -37,17 +37,17 @@ func Provider() terraform.ResourceProvider {
 				Type:          schema.TypeString,
 				Optional:      true,
 				ConflictsWith: []string{"token"},
-				DefaultFunc:   schema.EnvDefaultFunc("PKS_CLIENT_ID", nil),
+				DefaultFunc:   schema.EnvDefaultFunc("TKGI_CLIENT_ID", nil),
 			},
 
 			"client_secret": {
 				Type:          schema.TypeString,
 				Optional:      true,
 				ConflictsWith: []string{"token"},
-				DefaultFunc:   schema.EnvDefaultFunc("PKS_CLIENT_SECRET", nil),
+				DefaultFunc:   schema.EnvDefaultFunc("TKGI_CLIENT_SECRET", nil),
 			},
 
-			/* TODO (check whats the supported service client auth flow for pks api
+			/* TODO (check whats the supported service client auth flow for tkgi api
 			"username": &schema.Schema{
 				Type:        schema.TypeString,
 				Optional:    true,
@@ -63,28 +63,28 @@ func Provider() terraform.ResourceProvider {
 			"skip_ssl_validation": {
 				Type:        schema.TypeBool,
 				Optional:    true,
-				DefaultFunc: schema.EnvDefaultFunc("PKS_SKIP_SSL_VALIDATION", false),
+				DefaultFunc: schema.EnvDefaultFunc("TKGI_SKIP_SSL_VALIDATION", false),
 			},
 
 			"max_wait_min": {
 				Type:        schema.TypeInt,
 				Optional:    true,
 				Description: "Max length of time (in minutes) the provider will wait for async operations - like cluster creation - to finish",
-				DefaultFunc: schema.EnvDefaultFunc("PKS_MAX_WAIT_MIN", 20),
+				DefaultFunc: schema.EnvDefaultFunc("TKGI_MAX_WAIT_MIN", 20),
 			},
 
 			"wait_poll_interval_sec": {
 				Type:        schema.TypeInt,
 				Optional:    true,
 				Description: "Frequency of polling (in seconds) while waiting for async operations like cluster creation",
-				DefaultFunc: schema.EnvDefaultFunc("PKS_WAIT_POLL_INTERVAL_SEC", 10),
+				DefaultFunc: schema.EnvDefaultFunc("TKGI_WAIT_POLL_INTERVAL_SEC", 10),
 			},
 		},
 		ResourcesMap: map[string]*schema.Resource{
-			"pks_cluster": resourcePksCluster(),
+			"tkgi_cluster": resourcePksCluster(),
 			/* TODO
-			"pks_network_profile": resourcePksNetworkProfile(),
-			"pks_sink": resourcePksSink(),
+			"tkgi_network_profile": resourcePksNetworkProfile(),
+			"tkgi_sink": resourcePksSink(),
 			*/
 		},
 		ConfigureFunc: providerConfigure,
@@ -99,9 +99,9 @@ func providerConfigure(d *schema.ResourceData) (interface{}, error) {
 			TLSClientConfig:    &tls.Config{InsecureSkipVerify: true},
 			DisableCompression: true,
 		}
-		c.Transport = logging.NewTransport("pks", tr)
+		c.Transport = logging.NewTransport("tkgi", tr)
 	} else {
-		c.Transport = logging.NewTransport("pks", c.Transport)
+		c.Transport = logging.NewTransport("tkgi", c.Transport)
 	}
 
 	hostname := d.Get("hostname").(string)

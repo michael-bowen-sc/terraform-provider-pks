@@ -1,4 +1,4 @@
-module github.com/benjvi/terraform-provider-pks
+module github.com/benjvi/terraform-provider-tkgi
 
 go 1.13
 
