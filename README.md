@@ -1,16 +1,7 @@
-Terraform Provider
-==================
+Terraform Provider for TKGI
+===========================
 
-It's a Terraform provider for TKGI. At the moment the only completed resource is the `tkgi_cluster` resource for creating clusters.
-
-Note that this is not an officially supported provider. Nor does the TKGI HTTP API offer any direct guarantees to maintaining compatibility over upgrades. 
-However, if you encounter any issues you are welcome to raise an issue on this repo.
-
-- Website: https://www.terraform.io
-- [![Gitter chat](https://badges.gitter.im/hashicorp-terraform/Lobby.png)](https://gitter.im/hashicorp-terraform/Lobby)
-- Mailing list: [Google Groups](http://groups.google.com/group/terraform-tool)
-
-<img src="https://cdn.rawgit.com/hashicorp/terraform-website/master/content/source/assets/images/logo-hashicorp.svg" width="600px">
+It's a Terraform provider for TKGI. 
 
 Requirements
 ------------
@@ -39,6 +30,7 @@ resource "tkgi_cluster" "example" {
   external_hostname = "${var.k8s_api_dns_name}"
   plan = "small"
   num_nodes = 1
+  network_profile = xyz
 }
 
 variable "k8s_api_dns_name" {
@@ -73,7 +65,7 @@ Clone repository to: `$HOME/development/terraform-providers/`
 
 ```sh
 $ mkdir -p $HOME/development/terraform-providers/; cd $HOME/development/terraform-providers/
-$ git clone git@github.com:terraform-providers/terraform-provider-aws
+$ git clone git@github.com:michael-bowen-sc/terraform-provider-tkgi
 ...
 ```
 
@@ -88,7 +80,7 @@ To compile the provider, run `make build`. This will build the provider and put 
 ```sh
 $ make build
 ...
-$ $GOPATH/bin/terraform-provider-aws
+$ $GOPATH/bin/terraform-provider-tkgi
 ...
 ```
 

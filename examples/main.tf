@@ -10,7 +10,7 @@ resource "tkgi_cluster" "example" {
   external_hostname = "${var.k8s_api_dns_name}"
   plan = "small"
   num_nodes = 1
-//network_profile = "xyz" # unimplemented
+  network_profile = "xyz" 
 }
 
 variable "k8s_api_dns_name" {
